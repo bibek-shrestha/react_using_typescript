@@ -2,10 +2,10 @@
 import React, { Component } from "react";
 import style from './banner.module.css'
 
-interface BannerProps {
+interface BannerComponentProps {
     headerText: string
 }
-class Banner extends Component<BannerProps> {
+class BannerComponent extends Component<BannerComponentProps> {
     render() {
         return (
             <header className="row mb-4">
@@ -21,4 +21,4 @@ class Banner extends Component<BannerProps> {
     }
 }
 
-export default Banner;  
+export default BannerComponent;  

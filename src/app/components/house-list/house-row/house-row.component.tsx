@@ -4,17 +4,18 @@ import currencyFormatter from "../../../helpers/currency-formatter";
 import House from "../model/house";
 
 
-interface HouseRowProps {
-    house: House
+interface HouseRowComponentProps {
+    house: House;
+    setSelectedHouse: (selectedHouse: House) => void;
 }
 
-class HouseRow extends Component<HouseRowProps> {
+class HouseRowComponent extends Component<HouseRowComponentProps> {
 
     render(): ReactNode {
         const {address, country, price} = this.props.house;
         return (
             <>
-                <tr>
+                <tr onClick={() => this.props.setSelectedHouse(this.props.house)}>
                     <td>{address}</td>
                     <td>{country}</td>
                     <td>{currencyFormatter.format(price)}</td>
@@ -24,4 +25,4 @@ class HouseRow extends Component<HouseRowProps> {
     }
 }
 
-export default HouseRow;
+export default HouseRowComponent;

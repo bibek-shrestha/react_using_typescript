@@ -1,32 +1,31 @@
 'use client';
 import { Component } from "react";
-import HouseRow from "./house-row/house-row";
+import HouseRow from "./house-row/house-row.component";
 import House from "./model/house";
 
-const houseList = [
-    {
-        id: 1,
-        address: '40 Albert Street, Rhodes',
-        country: 'Australia',
-        price: 1000000
-    },
-    {
-        id: 2,
-        address: '10 Alva Stree, Strathfield',
-        country: 'Australia',
-        price: 900000
-    }
-];
-
-interface HouseListState {
+interface HouseListComponentState {
     houseList: House[]
 }
-class HouseList extends Component<object, HouseListState> {
-    constructor(props: object) {
+interface HouseListProps {
+    setSelectedHouse: (selectedHouse: House) => void; 
+}
+class HouseListComponent extends Component<HouseListProps, HouseListComponentState> {
+    constructor(props: HouseListProps) {
         super(props);
         this.state = {
-            houseList: [...houseList]
+            houseList: []
         }
+    }
+
+    componentDidMount(): void {
+        const fetchHouseList = async () => {
+            const response = await fetch("https://localhost:9000/api/houses")
+            const houseList = await response.json();
+            this.setState({
+                houseList: [...houseList]
+            })
+        };
+        fetchHouseList();
     }
 
     addHouse = () => {
@@ -60,13 +59,13 @@ class HouseList extends Component<object, HouseListState> {
                         </tr>
                     </thead>
                     <tbody>
-                        {this.state.houseList.map((house) => <HouseRow key={house.id} house={house} />)}
+                        {this.state.houseList.map((house) => <HouseRow key={house.id} house={house} setSelectedHouse={this.props.setSelectedHouse} />)}
                     </tbody>
                 </table>
-                <button className="btn btn-primary" onClick={this.addHouse}>Add</button>
+                {/* <button className="btn btn-primary" onClick={this.addHouse}>Add</button> */}
             </>
         );
     }
 }
 
-export default HouseList;
+export default HouseListComponent;
