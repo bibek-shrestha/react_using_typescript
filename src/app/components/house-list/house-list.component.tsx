@@ -6,11 +6,9 @@ import House from "./model/house";
 interface HouseListComponentState {
     houseList: House[]
 }
-interface HouseListProps {
-    setSelectedHouse: (selectedHouse: House) => void; 
-}
-class HouseListComponent extends Component<HouseListProps, HouseListComponentState> {
-    constructor(props: HouseListProps) {
+
+class HouseListComponent extends Component<object, HouseListComponentState> {
+    constructor(props: object) {
         super(props);
         this.state = {
             houseList: []
@@ -59,7 +57,7 @@ class HouseListComponent extends Component<HouseListProps, HouseListComponentSta
                         </tr>
                     </thead>
                     <tbody>
-                        {this.state.houseList.map((house) => <HouseRow key={house.id} house={house} setSelectedHouse={this.props.setSelectedHouse} />)}
+                        {this.state.houseList.map((house) => <HouseRow key={house.id} house={house} />)}
                     </tbody>
                 </table>
                 {/* <button className="btn btn-primary" onClick={this.addHouse}>Add</button> */}

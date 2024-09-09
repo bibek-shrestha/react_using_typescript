@@ -1,33 +1,42 @@
 import { Component } from "react";
 import BannerComponent from "../banner/banner.component";
-import HouseListComponent from "../house-list/house-list.component";
 import House from "../house-list/model/house";
-import HouseComponent from "../house/house.component";
+import HouseContext from "@/app/context/house-context";
+import navigation from "@/app/helpers/navigation";
+import ComponentPickerComponent from "../component-picker/component-picker.component";
 
 interface MainComponentState {
-    selectedHouse?: House | null
+    currentNavigation: string;
+    selectedHouse?: House;
+    navigate: (navigateTo: string, selectedHouse?: House) => void;
 }
-export class MainComponent extends Component<object, MainComponentState>  {
+export class MainComponent extends Component<object, MainComponentState> {
     constructor(props: object) {
         super(props);
         this.state = {
-            selectedHouse: null
+            currentNavigation: navigation.home,
+            selectedHouse: undefined,
+            navigate: this.navigate.bind(this)
         }
-        this.setSelectedHouse = this.setSelectedHouse.bind(this);
     }
 
-    setSelectedHouse(house: House): void {
-        this.setState({selectedHouse: house });
+    navigate(navigateTo: string, selectedHouse?: House): void {
+        this.setState({
+            currentNavigation: navigateTo,
+            selectedHouse: selectedHouse,
+            navigate: this.navigate.bind(this)
+        })
     }
 
     render() {
-        const selectedHouse = this.state.selectedHouse;
         return (
             <>
-                <div className="container">
-                    <BannerComponent headerText="Providing houses all over the world." />
-                    {selectedHouse ? <HouseComponent house={selectedHouse} /> : <HouseListComponent setSelectedHouse={this.setSelectedHouse}/>}
-                </div>
+                <HouseContext.Provider value={{...this.state}}>
+                    <div className="container">
+                        <BannerComponent headerText="Providing houses all over the world." />
+                        <ComponentPickerComponent selectedNavigation={this.state.currentNavigation} />
+                    </div>
+                </HouseContext.Provider>
             </>
         );
     }
